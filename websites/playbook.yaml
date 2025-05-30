@@ -23,15 +23,18 @@
         owner: root
         group: root
         mode: '0644'
+      register: caddyfile_result
 
     - name: Reload caddy
       become: "{{ not ansible_check_mode }}"
       ansible.builtin.systemd_service:
         name: caddy
         state: reloaded
+      when: caddyfile_result.changed
 
     - name: Restart caddy
       become: "{{ not ansible_check_mode }}"
       ansible.builtin.systemd_service:
         name: caddy
         state: restarted
+      when: caddyfile_result.changed
