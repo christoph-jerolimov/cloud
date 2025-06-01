@@ -1,0 +1,32 @@
+- name: Create www-mc user and www folder
+  hosts: websites
+  become: "{{ not ansible_check_mode }}"
+  tasks:
+    - name: Ensure user exists with home
+      ansible.builtin.user:
+        name: www-mc
+        create_home: yes
+
+    - name: Ensure home folder exists and has correct permissions
+      ansible.builtin.file:
+        path: /home/www-mc
+        state: directory
+        owner: www-mc
+        group: www-mc
+        mode: '0755'
+
+    - name: Ensure www folder exists and has correct permissions
+      ansible.builtin.file:
+        path: /home/www-mc/www
+        state: directory
+        owner: www-mc
+        group: www-mc
+        mode: '0755'
+
+    - name: Add index.html file
+      ansible.builtin.copy:
+        src: ../placeholders/under-construction.html
+        dest: /home/www-mc/www/index.html
+        owner: www-mc
+        group: www-mc
+        mode: '0644'

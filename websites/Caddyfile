@@ -2,11 +2,100 @@
 	redir https://{host}{uri}
 }
 
-jerolimov.com,
-jerolimov.de,
-www.jerolimov.com,
-www.jerolimov.de
-{
+aktions.io, www.aktions.io {
+    root * /home/www-jerolimov/www
+    file_server
+}
+
+awaik.com, www.awaik.com, awaik.de, www.awaik.de {
     root * /usr/share/caddy
     file_server
 }
+
+azado.de, www.azado.de {
+    root * /usr/share/caddy
+    file_server
+}
+
+bettina-eschweiler.de {
+	redir https://www.{host}{uri}
+}
+www.bettina-eschweiler.de {
+    root * /home/www-be/www
+    file_server
+}
+
+bombenfund.de, www.bombenfund.de {
+    root * /usr/share/caddy
+    file_server
+}
+
+bonn-apparel.de, www.bonn-apparel.de, bonnapparel.de, www.bonnapparel.de {
+    root * /usr/share/caddy
+    file_server
+}
+
+bringnow.com, www.bringnow.com, bringnow.de, www.bringnow.de {
+    root * /usr/share/caddy
+    file_server
+}
+
+# buenoapp.com
+# buenoapp.de
+# buenoapps.com
+# buenoapps.de
+# buenobot.com
+# buenobot.de
+# buenobots.com
+# buenobots.de
+# buenocode.com
+# buenocode.de
+# buenoicon.com
+# buenoicons.com
+# buenotools.com
+# buenotools.de
+# daiquiri.online
+
+deskription.io, www.deskription.io {
+    root * /home/www-jerolimov/www
+    file_server
+}
+
+# donelee.com
+
+ecmascript.de, www.ecmascript.de {
+    root * /home/www-jerolimov/www
+    file_server
+}
+
+# hackerdojo.de
+# jackfrucht.de
+
+jerolimov.com, www.jerolimov.com, jerolimov.de, www.jerolimov.de, jerolimov.io, www.jerolimov.io {
+    root * /home/www-jerolimov/www
+    file_server
+}
+
+meetup.cologne, meetup.koeln {
+    root * /home/www-jerolimov/www
+    file_server
+}
+
+mobile-cologne.de, mobile.koeln, mobilecologne.de, mobile.cologne {
+    root * /home/www-mc/www
+    file_server
+}
+
+moimba.com, www.moimba.com, moimba.de, www.moimba.de {
+    root * /usr/share/caddy
+    file_server
+}
+
+pizzafahrer.de, www.pizzafahrer.de {
+    root * /usr/share/caddy
+    file_server
+}
+
+# tv-startup.com, tv-startup.de, tv-startups.com, tv-startups.de, tvstartup.de, tvstartups.de
+
+# tv.koeln

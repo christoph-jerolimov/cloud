@@ -2,7 +2,7 @@ export ANSIBLE_INVENTORY=inventory.yaml
 export ANSIBLE_PYTHON_INTERPRETER=auto_silent
 
 check:
-	ansible-playbook --check playbook.yaml
+	ansible-playbook --check playbook.yaml */playbook.yaml
 
 update:
-	ansible-playbook --ask-become-pass playbook.yaml
+	ansible-playbook --ask-become-pass playbook.yaml */playbook.yaml

@@ -1,0 +1,33 @@
+- name: Create www-jerolimov user and www folder
+  hosts: websites
+  become: "{{ not ansible_check_mode }}"
+  tasks:
+    - name: Ensure user exists with home
+      ansible.builtin.user:
+        name: www-jerolimov
+        create_home: yes
+
+    - name: Ensure home folder exists and has correct permissions
+      ansible.builtin.file:
+        path: /home/www-jerolimov
+        state: directory
+        owner: www-jerolimov
+        group: www-jerolimov
+        mode: '0755'
+
+    - name: Ensure www folder exists and has correct permissions
+      ansible.builtin.file:
+        path: /home/www-jerolimov/www
+        state: directory
+        owner: www-jerolimov
+        group: www-jerolimov
+        mode: '0755'
+
+    - name: Add index.html file
+      become: "{{ not ansible_check_mode }}"
+      ansible.builtin.copy:
+        src: ../placeholders/hello-world.html
+        dest: /home/www-jerolimov/www/index.html
+        owner: www-jerolimov
+        group: www-jerolimov
+        mode: '0644'
