@@ -1,0 +1,21 @@
+- name: Cluster kube-1
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    # Setup servers
+    # https://docs.ansible.com/projects/ansible/latest/collections/hetzner/hcloud/server_module.html#examples
+    # states: present, absent, started, stopped, restarted, rebuild
+    - name: Server kube-1
+      hetzner.hcloud.server:
+        name: kube-1
+        server_type: cpx32
+        location: nbg1
+        image: centos-stream-10
+        backups: true
+        enable_ipv4: true
+        enable_ipv6: true
+        ssh_keys:
+          - cj-hetzner
+        state: present
+      register: server

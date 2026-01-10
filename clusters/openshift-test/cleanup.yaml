@@ -1,0 +1,12 @@
+- name: Cleanup all clusters
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: DELETE openshift-1
+      hetzner.hcloud.server:
+        name: openshift-1
+        server_type: cpx32
+        location: nbg1
+        image: centos-stream-10
+        state: absent

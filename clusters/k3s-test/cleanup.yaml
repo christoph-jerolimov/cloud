@@ -1,0 +1,12 @@
+- name: Cleanup all clusters
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: DELETE k3s-test
+      hetzner.hcloud.server:
+        name: k3s-test
+        server_type: cpx32
+        location: nbg1
+        image: centos-stream-10
+        state: absent
