@@ -1,0 +1,7 @@
+bettina-eschweiler.de {
+	redir https://www.{host}{uri}
+}
+www.bettina-eschweiler.de {
+    root * /home/www-be/www
+    file_server
+}
