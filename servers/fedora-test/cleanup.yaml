@@ -1,0 +1,12 @@
+- name: DELETE all servers
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: DELETE fedora-test
+      hetzner.hcloud.server:
+        name: fedora-test
+        location: nbg1
+        server_type: cx23
+        image: fedora-38
+        state: absent

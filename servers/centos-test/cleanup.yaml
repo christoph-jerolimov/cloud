@@ -1,0 +1,12 @@
+- name: DELETE all servers
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: DELETE centos-test
+      hetzner.hcloud.server:
+        name: centos-test
+        location: nbg1
+        server_type: cx23
+        image: centos-stream-10
+        state: absent

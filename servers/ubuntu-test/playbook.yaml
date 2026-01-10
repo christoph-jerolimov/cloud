@@ -1,20 +1,26 @@
-- name: Cluster openshift-1
+- name: Server ubuntu-test
   hosts: localhost
   connection: local
   gather_facts: false
+  user: root
   tasks:
     # Setup servers
     # https://docs.ansible.com/projects/ansible/latest/collections/hetzner/hcloud/server_module.html#examples
     # states: present, absent, started, stopped, restarted, rebuild
-    - name: Server openshift-1
+    - name: Server ubuntu-test
       hetzner.hcloud.server:
-        name: openshift-1
+        name: ubuntu-test
         location: nbg1
-        server_type: cpx32
-        image: centos-stream-10
-        backups: true
+        server_type: cx23
+        image: ubuntu-24.04
+        backups: false
         enable_ipv4: true
         enable_ipv6: true
         ssh_keys:
           - cj-hetzner
+        state: present
+      register: server
+    - name: Has apache2
+      ansible.builtin.package:
+        name: httpd
         state: present
