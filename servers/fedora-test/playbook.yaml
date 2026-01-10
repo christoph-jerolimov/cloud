@@ -2,7 +2,6 @@
   hosts: localhost
   connection: local
   gather_facts: false
-  user: root
   tasks:
     # Setup servers
     # https://docs.ansible.com/projects/ansible/latest/collections/hetzner/hcloud/server_module.html#examples
@@ -20,7 +19,23 @@
           - cj-hetzner
         state: present
       register: server
+    - name: Add server to inventory
+      ansible.builtin.add_host:
+        name: "{{ server.hcloud_server.ipv4_address }}"
+        groups: server
+
+- name: Webserver fedora-test
+  hosts: server
+  user: root
+  # become: "{{ not ansible_check_mode }}"
+  gather_facts: false
+  tasks:
     - name: Has apache2
       ansible.builtin.package:
         name: httpd
         state: present
+    - name: Enabled and running apache2
+      ansible.builtin.systemd:
+        name: httpd
+        enabled: true
+        state: started
