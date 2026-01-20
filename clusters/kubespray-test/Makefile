@@ -5,7 +5,7 @@ run:
 	ansible-playbook playbook.yaml
 
 install-dependencies:
-	ansible-galaxy collection install git+https://github.com/k3s-io/k3s-ansible.git
+	ansible-galaxy install -r requirements.yml
 
 cleanup:
 	ansible-playbook cleanup.yaml
@@ -14,8 +14,7 @@ check:
 	ansible-playbook --check playbook.yaml cleanup.yaml
 
 ssh:
-	hcloud server ssh k3s-test
+	hcloud server ssh kubespray-test
 
 open:
-	gnome-open http://$(shell hcloud server ip k3s-test)
-
+	gnome-open http://$(shell hcloud server ip kubespray-test)

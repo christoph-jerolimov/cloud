@@ -1,14 +1,15 @@
-- name: Cluster k3s-test
+- name: Cluster kubespray-test
   hosts: localhost
   connection: local
   gather_facts: false
   tasks:
+    # TODO: add firewall
     # Setup servers
     # https://docs.ansible.com/projects/ansible/latest/collections/hetzner/hcloud/server_module.html#examples
     # states: present, absent, started, stopped, restarted, rebuild
-    - name: Server k3s-test
+    - name: Server kubespray-test
       hetzner.hcloud.server:
-        name: k3s-test
+        name: kubespray-test
         location: nbg1
         server_type: cpx32
         image: centos-stream-10
@@ -22,10 +23,14 @@
     - name: Add server to inventory
       ansible.builtin.add_host:
         name: "{{ server.hcloud_server.ipv4_address }}"
-        groups: server
+        groups: kube_control_plane
+    - name: Add server to inventory
+      ansible.builtin.add_host:
+        name: "{{ server.hcloud_server.ipv4_address }}"
+        groups: kube_node
 
-- name: Packages on k3s-test
-  hosts: server
+- name: Tools on kubespray-test
+  hosts: kube_control_plane
   user: root
   # become: "{{ not ansible_check_mode }}"
   gather_facts: false
@@ -36,18 +41,18 @@
         name: net-tools
         state: present
 
-# - name: K3S server prereq
-#   hosts: server
-#   user: root
-#   roles:
-#     - role: k3s.orchestration.prereq
-#     - role: k3s.orchestration.airgap
-
-- name: K3S server
-  hosts: server
-  user: root
+- name: Kubernetes on kubespray-test
   vars:
-    api_endpoint: "{{ server.hcloud_server.ipv4_address }}"
-    k3s_version: v1.33.4+k3s1
-  roles:
-    - role: k3s.orchestration.k3s_server
+    # TODO: use user
+    ansible_user: root
+
+    # allow newer ansible version
+    maximal_ansible_version: 2.18.13
+    # install etc. on control plane
+    # https://github.com/kubernetes-sigs/kubespray/blob/master/docs/operations/etcd.md
+    etcd_deployment_type: kubeadm
+
+    helm_enabled: True
+    cert_manager_enabled: True
+    
+  ansible.builtin.import_playbook: kubernetes_sigs.kubespray.cluster

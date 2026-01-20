@@ -1,4 +1,4 @@
-- name: Cluster openshift-1
+- name: Cluster openshift-test
   hosts: localhost
   connection: local
   gather_facts: false
@@ -6,15 +6,64 @@
     # Setup servers
     # https://docs.ansible.com/projects/ansible/latest/collections/hetzner/hcloud/server_module.html#examples
     # states: present, absent, started, stopped, restarted, rebuild
-    - name: Server openshift-1
+    - name: Server openshift-test
       hetzner.hcloud.server:
         name: openshift-1
         location: nbg1
         server_type: cpx32
         image: centos-stream-10
-        backups: true
+        backups: false
         enable_ipv4: true
         enable_ipv6: true
         ssh_keys:
           - cj-hetzner
         state: present
+      register: server
+    - name: Add server to inventory
+      ansible.builtin.add_host:
+        name: "{{ server.hcloud_server.ipv4_address }}"
+        groups: server
+
+- name: Setup OpenShift
+  hosts: server
+  user: root
+  # become: "{{ not ansible_check_mode }}"
+  gather_facts: false
+  tasks:
+    - name: Install dependencies
+      ansible.builtin.package:
+        name:
+         - tar
+         - unzip
+        state: present
+
+    - name: Download openshift-client
+      ansible.builtin.get_url:
+        url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.20.0/openshift-client-linux.tar.gz
+        dest: /root/openshift-client-linux.tar.gz
+
+    - name: Extract openshift-client
+      ansible.builtin.unarchive:
+        src: /root/openshift-client-linux.tar.gz
+        dest: /usr/local/bin
+        include: oc
+        remote_src: true
+
+    - name: Create a kubectl symlink
+      ansible.builtin.file:
+        src: ./oc
+        dest: /usr/local/bin/kubectl
+        state: link
+
+    - name: Download openshift-install
+      ansible.builtin.get_url:
+        url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.20.0/openshift-install-linux.tar.gz
+        dest: /root/openshift-install-linux.tar.gz
+
+    - name: Extract openshift-install
+      ansible.builtin.unarchive:
+        src: /root/openshift-install-linux.tar.gz
+        dest: /usr/local/bin
+        include: openshift-install
+        remote_src: true
+

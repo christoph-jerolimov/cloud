@@ -14,8 +14,7 @@ check:
 	ansible-playbook --check playbook.yaml cleanup.yaml
 
 ssh:
-	hcloud server ssh k3s-test
+	hcloud server ssh k8s-test
 
 open:
-	gnome-open http://$(shell hcloud server ip k3s-test)
-
+	gnome-open http://$(shell hcloud server ip k8s-test)

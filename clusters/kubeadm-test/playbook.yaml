@@ -9,12 +9,26 @@
     - name: Server k8s-test
       hetzner.hcloud.server:
         name: k8s-test
-        server_type: cpx32
         location: nbg1
+        server_type: cpx32
         image: centos-stream-10
-        backups: true
+        backups: false
         enable_ipv4: true
         enable_ipv6: true
         ssh_keys:
           - cj-hetzner
         state: present
+      register: server
+    - name: Add server to inventory
+      ansible.builtin.add_host:
+        name: "{{ server.hcloud_server.ipv4_address }}"
+        groups: server
+
+- name: Kubernetes on k8s-test
+  hosts: server
+  user: root
+  vars:
+    kubernetes_allow_pods_on_control_plane: true
+  roles:
+    # - geerlingguy.docker
+    - geerlingguy.kubernetes

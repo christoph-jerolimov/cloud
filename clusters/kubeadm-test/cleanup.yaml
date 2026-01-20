@@ -1,9 +1,9 @@
-- name: Cleanup all clusters
+- name: DELETE cluster k8s-test
   hosts: localhost
   connection: local
   gather_facts: false
   tasks:
-    - name: DELETE k8s-test
+    - name: DELETE server k8s-test
       hetzner.hcloud.server:
         name: k8s-test
         server_type: cpx32

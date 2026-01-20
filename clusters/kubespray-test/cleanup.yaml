@@ -1,12 +1,12 @@
-- name: DELETE cluster openshift-test
+- name: DELETE cluster kubespray-test
   hosts: localhost
   connection: local
   gather_facts: false
   tasks:
-    - name: DELETE server openshift-test
+    - name: DELETE server kubespray-test
       hetzner.hcloud.server:
-        name: openshift-test
-        location: nbg1
+        name: kubespray-test
         server_type: cpx32
+        location: nbg1
         image: centos-stream-10
         state: absent
