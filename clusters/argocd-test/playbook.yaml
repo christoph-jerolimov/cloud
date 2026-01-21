@@ -1,0 +1,58 @@
+- name: Cluster argocd-test
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    # TODO: add firewall
+    # Setup servers
+    # https://docs.ansible.com/projects/ansible/latest/collections/hetzner/hcloud/server_module.html#examples
+    # states: present, absent, started, stopped, restarted, rebuild
+    - name: Server argocd-test
+      hetzner.hcloud.server:
+        name: argocd-test
+        location: nbg1
+        server_type: cpx32
+        image: centos-stream-10
+        backups: false
+        enable_ipv4: true
+        enable_ipv6: true
+        ssh_keys:
+          - cj-hetzner
+        state: present
+      register: server
+    - name: Add server to inventory
+      ansible.builtin.add_host:
+        name: "{{ server.hcloud_server.ipv4_address }}"
+        groups: kube_control_plane
+    - name: Add server to inventory
+      ansible.builtin.add_host:
+        name: "{{ server.hcloud_server.ipv4_address }}"
+        groups: kube_node
+
+- name: Tools on argocd-test
+  hosts: kube_control_plane
+  user: root
+  # become: "{{ not ansible_check_mode }}"
+  gather_facts: false
+  tasks:
+    - name: Has net-tools
+      ansible.builtin.package:
+        update_cache: yes
+        name: net-tools
+        state: present
+
+- name: Kubernetes on argocd-test
+  vars:
+    # TODO: use user
+    ansible_user: root
+
+    # allow newer ansible version
+    maximal_ansible_version: 2.18.13
+    # install etc. on control plane
+    # https://github.com/kubernetes-sigs/kubespray/blob/master/docs/operations/etcd.md
+    etcd_deployment_type: kubeadm
+
+    argocd_enabled: true
+    cert_manager_enabled: True
+    
+  ansible.builtin.import_playbook: kubernetes_sigs.kubespray.cluster

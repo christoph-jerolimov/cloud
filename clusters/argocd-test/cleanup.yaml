@@ -1,0 +1,12 @@
+- name: DELETE cluster argocd-test
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: DELETE server argocd-test
+      hetzner.hcloud.server:
+        name: argocd-test
+        server_type: cpx32
+        location: nbg1
+        image: centos-stream-10
+        state: absent
