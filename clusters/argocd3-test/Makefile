@@ -14,14 +14,14 @@ check:
 	ansible-playbook --check playbook.yaml cleanup.yaml
 
 ssh:
-	hcloud server ssh argocd-test
+	hcloud server ssh argocd3-test
 
 open:
-	gnome-open http://$(shell hcloud server ip argocd-test)
+	gnome-open http://$(shell hcloud server ip argocd3-test)
 
 get-kubeconfig:
-	@hcloud server ssh argocd-test -- cat /etc/kubernetes/admin.conf \
-		| sed 's/127.0.0.1:6443/$(shell hcloud server ip argocd-test):6443/g' \
+	@hcloud server ssh argocd3-test -- cat /etc/kubernetes/admin.conf \
+		| sed 's/127.0.0.1:6443/$(shell hcloud server ip argocd3-test):6443/g' \
 		> kubeconfig.yaml
 	@echo
 	@echo "Please run export KUBECONFIG=\$$(pwd)/kubeconfig.yaml"
