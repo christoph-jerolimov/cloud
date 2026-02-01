@@ -53,6 +53,10 @@
     etcd_deployment_type: kubeadm
 
     argocd_enabled: true
+    argocd_version: 2.14.21
+    # curl -s 'https://raw.githubusercontent.com/argoproj/argo-cd/v2.14.21/manifests/install.yaml' | sha256sum
+    argocd_install_checksum: sha256:ee39d40847bbb36154ebcdf2f5c93e0a9001ab60131afb60dbe42981a069699e
+
     cert_manager_enabled: True
     
   ansible.builtin.import_playbook: kubernetes_sigs.kubespray.cluster

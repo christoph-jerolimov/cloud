@@ -28,3 +28,10 @@ get-kubeconfig:
 	@echo
 	@echo "You can then run: kubectl get nodes"
 	@echo
+
+argocd-get-admin-password:
+	kubectl -n argocd get secrets/argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+	@echo
+
+argocd-port-forward:
+	kubectl port-forward svc/argocd-server -n argocd 8080:443
